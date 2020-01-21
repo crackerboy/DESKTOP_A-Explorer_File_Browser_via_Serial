@@ -23,6 +23,7 @@ int scti(char ch) {
 
 void rightWrite() {
     writeBytesLength = dataBytes.length();
+    serial.write("A-Explorer______");
     if (writeBytesLength) {
         serial.write("U");
     } else {
@@ -116,6 +117,7 @@ void MainWindow::on_pushButton_clicked()
 
     /* ДЕЙСТВИЯ С ПОСЛЕДОВАТЕЛЬНЫМ ПОРТОМ */
     mode = "DOWNLOAD";
+    serial.write("A-Explorer______");
     serial.write("D");
     serial.write(sizeOfFileNameBytes);
     serial.write(fileName.toUtf8().constData());
@@ -191,6 +193,7 @@ void MainWindow::on_pushButton_2_clicked()
     /* ДЕЙСТВИЯ С ПОСЛЕДОВАТЕЛЬНЫМ ПОРТОМ */
     recived.clear();
     mode = "UPLOAD";
+    serial.write("A-Explorer______");
     serial.write("U");
     serial.write(sizeOfFileNameBytes);
     serial.write(sizeOfFilBytes);
@@ -221,6 +224,7 @@ void MainWindow::on_pushButton_3_clicked()
         }
 
         mode = "MEMORY";
+        serial.write("A-Explorer______");
         serial.write("M");
 
         QObject::connect(&serial, &QSerialPort::readyRead, [&] {
@@ -272,6 +276,7 @@ void MainWindow::on_pushButton_3_clicked()
                     recived.clear();
                     sizeOfFile = 0;
                     mode = "MEMORY";
+                    serial.write("A-Explorer______");
                     serial.write("M");
                 }
             }
@@ -286,6 +291,7 @@ void MainWindow::on_pushButton_3_clicked()
                     ui->availableMemory->setText(QString::number((totalMemory - usedMemory)));
                     recived.clear();
                     mode = "LIST";
+                    serial.write("A-Explorer______");
                     serial.write("L");
                 }
             }
@@ -351,6 +357,7 @@ void MainWindow::on_pushButton_3_clicked()
                 if (recived.length() == 1) {
                     if (recived[0] == 'R') {
                         mode = "MEMORY";
+                        serial.write("A-Explorer______");
                         serial.write("M");
                     }
                     else if (recived[0] == 'r') {
@@ -365,6 +372,7 @@ void MainWindow::on_pushButton_3_clicked()
                 if (recived.length() == 1) {
                     if (recived[0] == 'E') {
                         mode = "MEMORY";
+                        serial.write("A-Explorer______");
                         serial.write("M");
                     }
                     else if (recived[0] == 'e') {
@@ -453,6 +461,7 @@ void MainWindow::on_pushButton_4_clicked()
         sizeOfFilename.append((Name.length() >> 8) & 0xFF);
         sizeOfFilename.append(Name.length() & 0xFF);
         mode = "REMOVE";
+        serial.write("A-Explorer______");
         serial.write("R");
         serial.write(sizeOfFilename);
         serial.write(Name.toUtf8().constData());
@@ -482,6 +491,7 @@ void MainWindow::on_pushButton_5_clicked()
     int r = msgBox.exec();
     if (r == QMessageBox::Yes) {
         mode = "ERASE";
+        serial.write("A-Explorer______");
         serial.write("E");
     }
 }
@@ -520,6 +530,7 @@ void MainWindow::on_pushButton_7_clicked()
     sizeOfFilename.append((Name.length() >> 8) & 0xFF);
     sizeOfFilename.append(Name.length()  & 0xFF);
     mode = "EXECUTE";
+    serial.write("A-Explorer______");
     serial.write("X");
     serial.write(sizeOfFilename);
     serial.write(Name.toUtf8().constData());
@@ -541,5 +552,6 @@ void MainWindow::on_pushButton_8_clicked()
         return;
     }
     mode = "REBOOT";
+    serial.write("A-Explorer______");
     serial.write("Q");
 }
