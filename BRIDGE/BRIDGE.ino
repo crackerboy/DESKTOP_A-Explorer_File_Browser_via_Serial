@@ -97,29 +97,31 @@ void bridge(void * pvParameters) {
         Serial.write((sizeOfData >> (i * 8)) & 0xFF);
       }
       
-      root = SPIFFS.open("/");
-      file = root.openNextFile();
-      while (file) {
-        if (!file.isDirectory()) {
-          String Name = file.name();
-          uint8_t sizeOfName = Name.length();
-          for (int i = 3; i > -1; i--) {
-            while (Serial.availableForWrite() < 1) delay(5);
-            Serial.write((sizeOfName >> (i * 8)) & 0xFF);
-          }
-          size_t fileSize = file.size();
-          for (int i = 3; i > -1; i--) {
-            while (Serial.availableForWrite() < 1) delay(5);
-            Serial.write((fileSize >> (i * 8)) & 0xFF);
-          }
-          for (uint8_t i = 0; i < sizeOfName; i++) {
-            while (Serial.availableForWrite() < 1) delay(5);
-            Serial.write(Name[i]);
-          }
-        }
+      if (sizeOfData > 0) {
+        root = SPIFFS.open("/");
         file = root.openNextFile();
-      }
-      root.close();
+        while (file) {
+          if (!file.isDirectory()) {
+            String Name = file.name();
+            uint8_t sizeOfName = Name.length();
+            for (int i = 3; i > -1; i--) {
+              while (Serial.availableForWrite() < 1) delay(5);
+              Serial.write((sizeOfName >> (i * 8)) & 0xFF);
+            }
+            size_t fileSize = file.size();
+            for (int i = 3; i > -1; i--) {
+              while (Serial.availableForWrite() < 1) delay(5);
+              Serial.write((fileSize >> (i * 8)) & 0xFF);
+            }
+            for (uint8_t i = 0; i < sizeOfName; i++) {
+              while (Serial.availableForWrite() < 1) delay(5);
+              Serial.write(Name[i]);
+            }
+          }
+          file = root.openNextFile();
+        }
+        root.close();
+     }
     }
   
     else if (f == 'R') {

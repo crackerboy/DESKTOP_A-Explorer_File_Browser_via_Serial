@@ -291,53 +291,60 @@ void MainWindow::on_pushButton_3_clicked()
             }
 
             else if (mode == "LIST") {
-               if ((recived.length() >= 4) && (sizeOfData == 0)) {
-                    ui->tableWidget->setRowCount(0);
-                    ui->tableWidget->clear();
-                    sizeOfData = (scti(recived[0]) << 24) | (scti(recived[1]) << 16) | (scti(recived[2]) << 8) | scti(recived[3]);
-                    recived.remove(0, 4);
-               }
-               if (((size_t)recived.length() == sizeOfData) && sizeOfData) {
-                   // вот тут всё самое интересное! ;)
-                   while (recived.length()) {
-                       uint8_t sizeOfName = (scti(recived[0]) << 24) | (scti(recived[1]) << 16) | (scti(recived[2]) << 8) | scti(recived[3]);
-                       size_t sizeOfFile = sizeOfFile = (scti(recived[4]) << 24) | (scti(recived[5]) << 16) | (scti(recived[6]) << 8) | scti(recived[7]);
-                       recived.remove(0, 8);
-                       QString Name = "";
-                       for (size_t i = 0; i < sizeOfName; i++) {
-                           Name.append(recived.at(i));
-                       }
-                       recived.remove(0, sizeOfName);
-                       QString extension = getExtension(Name);
-
-                       QString iconPath;
-                       if (extension == "txt") {
-                           iconPath = ":/new/icons/text.png";
-                       } else if ((extension == "bmp") || (extension == "jpg") || (extension == "png")) {
-                           iconPath = ":/new/icons/picture.png";
-                       } else if ((extension == "wav") || (extension == "mp3") || (extension == "mid")) {
-                           iconPath = ":/new/icons/music.png";
-                       } else if ((extension == "ini") || (extension == "js") || (extension == "css") || (extension == "xml")) {
-                           iconPath = ":/new/icons/engine.png";
-                       } else if ((extension == "html") || (extension == "htm")) {
-                           iconPath = ":/new/icons/world.png";
-                       } else {
-                           iconPath = ":/new/icons/unknown.png";
-                       }
-                       QIcon icon(iconPath);
-                       QTableWidgetItem *icon_item = new QTableWidgetItem;
-                       icon_item->setIcon(icon);
-                       int row = ui->tableWidget->rowCount();
-                       ui->tableWidget->insertRow(row);
-                       ui->tableWidget->setItem(row, 0, icon_item);
-                       ui->tableWidget->setItem(row, 1, new QTableWidgetItem(Name));
-                       ui->tableWidget->setItem(row, 2, new QTableWidgetItem(QString::number(sizeOfFile)));
-                       ui->tableWidget->setHorizontalHeaderLabels(QStringList() << "" << "Name" << "Size, Bytes");
-                       ui->tableWidget->verticalHeader()->hide();
-                   }
-                   mode = "";
-                   sizeOfData = 0;
-               }
+                if (sizeOfData == 0) {
+                    if (recived.length() >= 4) {
+                        ui->tableWidget->setRowCount(0);
+                        ui->tableWidget->clear();
+                        sizeOfData = (scti(recived[0]) << 24) | (scti(recived[1]) << 16) | (scti(recived[2]) << 8) | scti(recived[3]);
+                        if (sizeOfData == 0) {
+                            mode = "";
+                            recived.clear();
+                        } else {
+                            recived.remove(0, 4);
+                        }
+                    }
+                } else {
+                    if ((size_t)recived.length() == sizeOfData) {
+                        while (recived.length()) {
+                           uint8_t sizeOfName = (scti(recived[0]) << 24) | (scti(recived[1]) << 16) | (scti(recived[2]) << 8) | scti(recived[3]);
+                           size_t sizeOfFile = sizeOfFile = (scti(recived[4]) << 24) | (scti(recived[5]) << 16) | (scti(recived[6]) << 8) | scti(recived[7]);
+                           recived.remove(0, 8);
+                           QString Name = "";
+                           for (size_t i = 0; i < sizeOfName; i++) {
+                               Name.append(recived.at(i));
+                           }
+                           recived.remove(0, sizeOfName);
+                           QString extension = getExtension(Name);
+                           QString iconPath;
+                           if (extension == "txt") {
+                               iconPath = ":/new/icons/text.png";
+                           } else if ((extension == "bmp") || (extension == "jpg") || (extension == "png")) {
+                               iconPath = ":/new/icons/picture.png";
+                           } else if ((extension == "wav") || (extension == "mp3") || (extension == "mid")) {
+                               iconPath = ":/new/icons/music.png";
+                           } else if ((extension == "ini") || (extension == "js") || (extension == "css") || (extension == "xml")) {
+                               iconPath = ":/new/icons/engine.png";
+                           } else if ((extension == "html") || (extension == "htm")) {
+                               iconPath = ":/new/icons/world.png";
+                           } else {
+                               iconPath = ":/new/icons/unknown.png";
+                           }
+                           QIcon icon(iconPath);
+                           QTableWidgetItem *icon_item = new QTableWidgetItem;
+                           icon_item->setIcon(icon);
+                           int row = ui->tableWidget->rowCount();
+                           ui->tableWidget->insertRow(row);
+                           ui->tableWidget->setItem(row, 0, icon_item);
+                           ui->tableWidget->setItem(row, 1, new QTableWidgetItem(Name));
+                           ui->tableWidget->setItem(row, 2, new QTableWidgetItem(QString::number(sizeOfFile)));
+                           ui->tableWidget->setHorizontalHeaderLabels(QStringList() << "" << "Name" << "Size, Bytes");
+                           ui->tableWidget->verticalHeader()->hide();
+                        }
+                        recived.clear();
+                        sizeOfData = 0;
+                        mode = "";
+                    }
+                }
             }
 
             else if (mode == "REMOVE") {
