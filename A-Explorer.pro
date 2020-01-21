@@ -33,7 +33,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 # macOS
-#ICON = favicon.icns
+ICON = favicon.icns
 
 RESOURCES += \
     res.qrc
