@@ -221,13 +221,18 @@ void MainWindow::on_pushButton_3_clicked()
 
         if (!serial.open(QIODevice::ReadWrite)) {
             ui->statusbar->showMessage("E: can't use the port");
+            return;
         }
+
+        serial.clear();
+        recived.clear();
 
         mode = "MEMORY";
         serial.write("A-Explorer______");
         serial.write("M");
 
         QObject::connect(&serial, &QSerialPort::readyRead, [&] {
+
             recived.append(serial.readAll());
             if (mode == "REBOOT") {
                mode = "";
@@ -332,7 +337,10 @@ void MainWindow::on_pushButton_3_clicked()
                                iconPath = ":/new/icons/engine.png";
                            } else if ((extension == "html") || (extension == "htm")) {
                                iconPath = ":/new/icons/world.png";
-                           } else {
+                           } else if (extension == "wifi") {
+                                iconPath = ":/new/icons/wifi.png";
+                            }
+                           else {
                                iconPath = ":/new/icons/unknown.png";
                            }
                            QIcon icon(iconPath);

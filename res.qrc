@@ -6,5 +6,6 @@
         <file>engine.png</file>
         <file>world.png</file>
         <file>picture.png</file>
+        <file>wifi.png</file>
     </qresource>
 </RCC>
