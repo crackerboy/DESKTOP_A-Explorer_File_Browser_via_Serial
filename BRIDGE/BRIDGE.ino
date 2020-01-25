@@ -299,31 +299,10 @@ void bridge(void * pvParameters) {
   }
 }
 
-char * WIFIpswd(char * ssid) {
-  String wifi = "/";
-  wifi += ssid;
-  wifi += ".wifi";
-  File file = SPIFFS.open(wifi, FILE_READ);
-  if (!file) {
-    return NULL;
-  }
-  String pswd = "";
-  while (file) {
-    pswd += (char)file.read();
-  }
-  char * pswd_ = new char[pswd.length() + 1];
-  strcpy(pswd_, pswd.c_str());
-  file.close();
-  return pswd_;
-}
-
 void setup() {
   M5.begin();
   SPIFFS.begin(true);
   xTaskCreatePinnedToCore(bridge, "bridge", 4096, NULL, 1, NULL, 1);
-
-  char * ssid = "Keenetic-0905";
-  M5.Lcd.println(WIFIpswd(ssid));
 }
 
 void loop() {
