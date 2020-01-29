@@ -303,7 +303,7 @@ void setup() {
   M5.begin();
   SPIFFS.begin(true);
   xTaskCreatePinnedToCore(bridge, "bridge", 4096, NULL, 1, NULL, 1);
-  
+
 }
 
 void loop() {
