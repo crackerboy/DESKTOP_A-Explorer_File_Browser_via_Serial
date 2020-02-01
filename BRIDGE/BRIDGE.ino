@@ -150,20 +150,8 @@ void AExplorer() {
 
   else if (f == 'E') {
     //M5.Lcd.println("ERASE MODE");
-
-    File root = SPIFFS.open("/");
-    if (!root) {
-      Serial.write('e');
-    } else {
-      File file = root.openNextFile();
-      while (file) {
-        if (!file.isDirectory()){
-          SPIFFS.remove(file.name());
-        }
-        file = root.openNextFile();
-      }
+      SPIFFS.format();
       Serial.write('E');
-    }
   }
 
   else if (f == 'U') {

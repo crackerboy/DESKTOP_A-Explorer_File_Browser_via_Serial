@@ -379,12 +379,10 @@ void MainWindow::on_pushButton_3_clicked()
             else if (mode == "ERASE") {
                 if (recived.length() == 1) {
                     if (recived[0] == 'E') {
+                        ui->statusbar->showMessage("formation complete");
                         mode = "MEMORY";
                         serial.write("A-Explorer______");
                         serial.write("M");
-                    }
-                    else if (recived[0] == 'e') {
-                        ui->statusbar->showMessage("E: can't erase all files");
                     }
                     else {}
                     recived.clear();
@@ -493,9 +491,10 @@ void MainWindow::on_pushButton_5_clicked()
         return;
     }
     msgBox.setIcon(QMessageBox::Warning);
-    msgBox.setText("Please, confirm to erasing ALL files");
+    msgBox.setText("Please, confirm to format SPIFFS");
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
     msgBox.setDefaultButton(QMessageBox::Cancel);
+    ui->statusbar->showMessage("formation, please wait...");
     int r = msgBox.exec();
     if (r == QMessageBox::Yes) {
         mode = "ERASE";
