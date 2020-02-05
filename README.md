@@ -14,4 +14,4 @@
 
 In begin of session GUI sent one char flag. Main flags:  **D** (download), **M** (memory), **L** (list), **R** (remove), **E** (format), **U** (upload), **X** (execute) и **Q** (reboot). In next step sending any parametrs like as size of file, name of file and e. t. c.
 
-It’s easy to prove that the bundle’s functionality includes a getting file list, space inforamtion, removing files, uploading and downloading, format memory, execution file (for example showing picture on LCD screen). In file browser shows percentage. Space of memory info show in progressbar.
+It’s easy to prove that the bundle’s functionality includes a getting file list, space inforamtion, removing files, uploading and downloading, format memory, execution file (for example showing picture on LCD screen). In file browser shows icons, filename and filesize. Process shows percentage in status bar. Space of memory info show in progressbar.
