@@ -239,22 +239,18 @@ void MainWindow::on_pushButton_3_clicked()
                recived.clear();
             }
 
-           if  (mode == "DOWNLOAD") {
+            if  (mode == "DOWNLOAD") {
                 if (sizeOfFile == 0) {
                     if (recived.length() == 1) {
-                        if (recived[0] == 'd') {
-                            recived.clear();
-                            mode = "";
-                            sizeOfFile = 0;
-                            ui->statusbar->showMessage("E: can't download the file");
-                        }
-                    }
-                    else if (recived.length() >= 4) {
+                        // err
+                    } else if (recived.length() >= 4) {
                         sizeOfFile = (scti(recived[0]) << 24) | (scti(recived[1]) << 16) | (scti(recived[2]) << 8) | scti(recived[3]);
                         recived.remove(0, 4);
                     }
                 }
-                else if (recived.length() == sizeOfFile) {
+                int p = (recived.length() * 100) / sizeOfFile;
+                ui->statusbar->showMessage("downloaded " + QString::number(p) + "%");
+                if (p == 100) {
                     file.open(QFile::WriteOnly);
                     file.write(recived);
                     file.close();
@@ -262,9 +258,6 @@ void MainWindow::on_pushButton_3_clicked()
                     mode = "";
                     sizeOfFile = 0;
                     ui->statusbar->showMessage("downloading complete");
-                } else {
-                    int p = (recived.length() * 100) / sizeOfFile;
-                    ui->statusbar->showMessage("downloaded " + QString::number(p) + "%");
                 }
             }
 
